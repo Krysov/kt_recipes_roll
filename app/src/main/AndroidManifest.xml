@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- the example app is meant to fetch its data always remotely hence no backups -->
     <application
         android:allowBackup="false"
         android:fullBackupContent="false"

@@ -11,6 +11,7 @@ import kmm.example.recipesroll.model.RecipeModel
 object RemoteRecipesApi : RecipesApi {
 
     private val client = CDAClient.builder()
+        // set contentful.space and contentful.token in local.properties
         .setSpace(BuildConfig.CONTENTFUL_SPACE)
         .setToken(BuildConfig.CONTENTFUL_TOKEN)
         .build()
