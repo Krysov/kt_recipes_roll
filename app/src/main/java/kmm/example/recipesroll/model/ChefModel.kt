@@ -1,5 +1,10 @@
 package kmm.example.recipesroll.model
 
-val CHEF_NOT_ASSIGNED = ChefModel("")
+import com.contentful.java.cda.TransformQuery.ContentfulEntryModel
+import com.contentful.java.cda.TransformQuery.ContentfulField
 
-data class ChefModel(val name: String)
+
+@ContentfulEntryModel("chef")
+data class ChefModel(
+    @ContentfulField val name: String? = null,
+)
