@@ -1,80 +1,17 @@
 package kmm.example.recipesroll.remote
 
+import com.contentful.java.cda.CDAAsset
 import com.google.gson.GsonBuilder
 import kmm.example.recipesroll.model.RecipeModel
 import java.util.*
 
 
 object DummyRecipesApi : RecipesApi {
-    private val data = """
+    private val recipeData = """
         [
           {
             "calories": 788.0,
             "description": "*Grilled Cheese 101*: Use delicious cheese and good quality bread; make crunchy on the outside and ooey gooey on the inside; add one or two ingredients for a flavor punch! In this case, cherry preserves serve as a sweet contrast to cheddar cheese, and basil adds a light, refreshing note. Use __mayonnaise__ on the outside of the bread to achieve the ultimate, crispy, golden-brown __grilled cheese__. Cook, relax, and enjoy!",
-            "photo": {
-              "defaultLocale": "en-US",
-              "fallbackLocaleMap": {},
-              "fields": {
-                "file": {
-                  "en-US": {
-                    "url": "//images.ctfassets.net/kk2bw5ojx476/61XHcqOBFYAYCGsKugoMYK/0009ec560684b37f7f7abadd66680179/SKU1240_hero-374f8cece3c71f5fcdc939039e00fb96.jpg",
-                    "details": {
-                      "size": 194737.0,
-                      "image": {
-                        "width": 1020.0,
-                        "height": 680.0
-                      }
-                    },
-                    "fileName": "SKU1240_hero-374f8cece3c71f5fcdc939039e00fb96.jpg",
-                    "contentType": "image/jpeg"
-                  }
-                },
-                "title": {
-                  "en-US": "SKU1240 hero-374f8cece3c71f5fcdc939039e00fb96"
-                }
-              },
-              "rawFields": {
-                "file": {
-                  "en-US": {
-                    "url": "//images.ctfassets.net/kk2bw5ojx476/61XHcqOBFYAYCGsKugoMYK/0009ec560684b37f7f7abadd66680179/SKU1240_hero-374f8cece3c71f5fcdc939039e00fb96.jpg",
-                    "details": {
-                      "size": 194737.0,
-                      "image": {
-                        "width": 1020.0,
-                        "height": 680.0
-                      }
-                    },
-                    "fileName": "SKU1240_hero-374f8cece3c71f5fcdc939039e00fb96.jpg",
-                    "contentType": "image/jpeg"
-                  }
-                },
-                "title": {
-                  "en-US": "SKU1240 hero-374f8cece3c71f5fcdc939039e00fb96"
-                }
-              },
-              "sys": {
-                "space": {
-                  "sys": {
-                    "type": "Link",
-                    "linkType": "Space",
-                    "id": "kk2bw5ojx476"
-                  }
-                },
-                "id": "61XHcqOBFYAYCGsKugoMYK",
-                "type": "Asset",
-                "createdAt": "2018-05-07T13:37:53.784Z",
-                "updatedAt": "2018-05-07T13:37:53.784Z",
-                "environment": {
-                  "sys": {
-                    "id": "master",
-                    "type": "Link",
-                    "linkType": "Environment"
-                  }
-                },
-                "revision": 1.0,
-                "locale": "en-US"
-              }
-            },
             "tags": [
               {
                 "name": "vegan"
@@ -88,7 +25,55 @@ object DummyRecipesApi : RecipesApi {
           {
             "calories": 900.0,
             "description": "Saag paneer is a popular Indian dish with iron-rich spinach and cubes of paneer, an Indian cheese that is firm enough to retain it\u0027s shape, but silky-soft on the inside. We have reimagined Saag Paneer and replaced the \"paneer\" with crispy cubes of firm tofu, making this already delicious and nutritious vegetarian dish burst with protein. Toasted pita bread is served alongside as an ode to naan. Cook, relax, and enjoy! [VIDEO](https://www.youtube.com/watch?v\u003dRMzWWwfWdVs)",
-            "photo": {
+            "title": "Tofu Saag Paneer with Buttery Toasted Pita"
+          },
+          {
+            "calories": 345.0,
+            "chef": {
+              "name": "Mark Zucchiniberg "
+            },
+            "description": "Warmer weather means the ushering in of grill season and this recipe completely celebrates the grill (or grill pan)! Squash and green beans are nicely charred then take a bath in a zesty cilantro-jalapeño dressing. After the steaks are perfectly seared, the same dressing does double duty as a tasty finishing sauce. A fresh radish salad tops it all off for crunch and a burst of color. Cook, relax, and enjoy!",
+            "title": "Grilled Steak \u0026 Vegetables with Cilantro-Jalapeño Dressing"
+          },
+          {
+            "calories": 785.0,
+            "chef": {
+              "name": "Jony Chives"
+            },
+            "description": "Crispy chicken skin, tender meat, and rich, tomatoey sauce form a winning trifecta of delicious in this one-pot braise. We spoon it over rice and peas to soak up every last drop of goodness, and serve a tangy arugula salad alongside for a vibrant boost of flavor and color. Dinner is served! Cook, relax, and enjoy!",
+            "tags": [
+              {
+                "name": "gluten free"
+              },
+              {
+                "name": "healthy"
+              }
+            ],
+            "title": "Crispy Chicken and Rice\twith Peas \u0026 Arugula Salad"
+          }
+        ]
+    """.trimIndent()
+
+    private val gson = GsonBuilder().setPrettyPrinting().create()
+
+    override fun fetchRecipes(
+        onResult: (Collection<RecipeModel>) -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        var i = 0
+        try {
+            onResult(gson.fromJson(recipeData, Array<RecipeModel>::class.java)
+                .asList()
+                .map { it.copy(photo = getPhotoData(i++)) })
+        } catch (e: Exception) {
+            onError(e)
+        }
+    }
+
+    private fun getPhotoData(i: Int): CDAAsset {
+        val photoData = when (i) {
+            2 -> """
+            {
               "defaultLocale": "en-US",
               "fallbackLocaleMap": {},
               "fields": {
@@ -151,16 +136,11 @@ object DummyRecipesApi : RecipesApi {
                 "revision": 1.0,
                 "locale": "en-US"
               }
-            },
-            "title": "Tofu Saag Paneer with Buttery Toasted Pita"
-          },
-          {
-            "calories": 345.0,
-            "chef": {
-              "name": "Mark Zucchiniberg "
-            },
-            "description": "Warmer weather means the ushering in of grill season and this recipe completely celebrates the grill (or grill pan)! Squash and green beans are nicely charred then take a bath in a zesty cilantro-jalapeño dressing. After the steaks are perfectly seared, the same dressing does double duty as a tasty finishing sauce. A fresh radish salad tops it all off for crunch and a burst of color. Cook, relax, and enjoy!",
-            "photo": {
+            }
+            """.trimIndent()
+
+            3 -> """
+            {
               "defaultLocale": "en-US",
               "fallbackLocaleMap": {},
               "fields": {
@@ -223,16 +203,11 @@ object DummyRecipesApi : RecipesApi {
                 "revision": 1.0,
                 "locale": "en-US"
               }
-            },
-            "title": "Grilled Steak \u0026 Vegetables with Cilantro-Jalapeño Dressing"
-          },
-          {
-            "calories": 785.0,
-            "chef": {
-              "name": "Jony Chives"
-            },
-            "description": "Crispy chicken skin, tender meat, and rich, tomatoey sauce form a winning trifecta of delicious in this one-pot braise. We spoon it over rice and peas to soak up every last drop of goodness, and serve a tangy arugula salad alongside for a vibrant boost of flavor and color. Dinner is served! Cook, relax, and enjoy!",
-            "photo": {
+            }
+            """.trimIndent()
+
+            4 -> """
+            {
               "defaultLocale": "en-US",
               "fallbackLocaleMap": {},
               "fields": {
@@ -295,30 +270,76 @@ object DummyRecipesApi : RecipesApi {
                 "revision": 1.0,
                 "locale": "en-US"
               }
-            },
-            "tags": [
-              {
-                "name": "gluten free"
+            }
+            """.trimIndent()
+
+            else -> """
+            {
+              "defaultLocale": "en-US",
+              "fallbackLocaleMap": {},
+              "fields": {
+                "file": {
+                  "en-US": {
+                    "url": "//images.ctfassets.net/kk2bw5ojx476/61XHcqOBFYAYCGsKugoMYK/0009ec560684b37f7f7abadd66680179/SKU1240_hero-374f8cece3c71f5fcdc939039e00fb96.jpg",
+                    "details": {
+                      "size": 194737.0,
+                      "image": {
+                        "width": 1020.0,
+                        "height": 680.0
+                      }
+                    },
+                    "fileName": "SKU1240_hero-374f8cece3c71f5fcdc939039e00fb96.jpg",
+                    "contentType": "image/jpeg"
+                  }
+                },
+                "title": {
+                  "en-US": "SKU1240 hero-374f8cece3c71f5fcdc939039e00fb96"
+                }
               },
-              {
-                "name": "healthy"
+              "rawFields": {
+                "file": {
+                  "en-US": {
+                    "url": "//images.ctfassets.net/kk2bw5ojx476/61XHcqOBFYAYCGsKugoMYK/0009ec560684b37f7f7abadd66680179/SKU1240_hero-374f8cece3c71f5fcdc939039e00fb96.jpg",
+                    "details": {
+                      "size": 194737.0,
+                      "image": {
+                        "width": 1020.0,
+                        "height": 680.0
+                      }
+                    },
+                    "fileName": "SKU1240_hero-374f8cece3c71f5fcdc939039e00fb96.jpg",
+                    "contentType": "image/jpeg"
+                  }
+                },
+                "title": {
+                  "en-US": "SKU1240 hero-374f8cece3c71f5fcdc939039e00fb96"
+                }
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "kk2bw5ojx476"
+                  }
+                },
+                "id": "61XHcqOBFYAYCGsKugoMYK",
+                "type": "Asset",
+                "createdAt": "2018-05-07T13:37:53.784Z",
+                "updatedAt": "2018-05-07T13:37:53.784Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "revision": 1.0,
+                "locale": "en-US"
               }
-            ],
-            "title": "Crispy Chicken and Rice\twith Peas \u0026 Arugula Salad"
-          }
-        ]
-    """.trimIndent()
-
-    private val gson = GsonBuilder().setPrettyPrinting().create()
-
-    override fun fetchRecipes(
-        onResult: (Collection<RecipeModel>) -> Unit,
-        onError: (Throwable) -> Unit
-    ) {
-        try {
-            onResult(gson.fromJson(data, Array<RecipeModel>::class.java).asList())
-        } catch (e: Exception) {
-            onError(e)
+            }
+            """.trimIndent()
         }
+        return gson.fromJson(photoData, CDAAsset::class.java)
     }
 }

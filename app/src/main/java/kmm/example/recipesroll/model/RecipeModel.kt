@@ -10,7 +10,7 @@ import com.contentful.java.cda.TransformQuery.ContentfulField
 // hence any attribute must be nullable and set to null
 // to allow for an empty constructor
 @ContentfulEntryModel("recipe")
-class RecipeModel(
+data class RecipeModel(
     @ContentfulField val title: String? = null,
     @ContentfulField val photo: CDAAsset? = null,
     @ContentfulField val calories: Double? = null,
