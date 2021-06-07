@@ -61,7 +61,7 @@ object DummyRecipesApi : RecipesApi {
                 calories = 788.0,
                 tags = listOf(
                     TagModel("vegan"),
-                    TagModel("fake cheese"),
+                    TagModel("cheese substitute"),
                 ),
             )
         }

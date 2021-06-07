@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kmm.example.recipesroll.BR
 import kmm.example.recipesroll.databinding.RecipeItemBinding
 import kmm.example.recipesroll.model.RecipeModel
 
@@ -45,31 +44,4 @@ class RecipesListView @JvmOverloads constructor(
 
         override fun getItemCount(): Int = recipes.size
     }
-
-
-    class RecipesItemViewHolder(
-        private val binding: RecipeItemBinding,
-        private val viewModel: RecipesViewModel,
-    ) : RecyclerView.ViewHolder(binding.root) {
-
-        fun init(recipe: RecipeModel) {
-            binding.setVariable(BR.recipe, recipe)
-            binding.executePendingBindings()
-            if (recipe.selected) expand()
-            else collapse()
-            itemView.setOnClickListener {
-                if (recipe.selected) viewModel.deselect(recipe)
-                else viewModel.select(recipe)
-            }
-        }
-
-        private fun expand() {
-            binding.expander.visibility = VISIBLE
-        }
-
-        private fun collapse() {
-            binding.expander.visibility = GONE
-        }
-    }
-
 }
