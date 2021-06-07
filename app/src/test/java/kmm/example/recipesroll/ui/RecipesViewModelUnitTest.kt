@@ -1,6 +1,7 @@
 package kmm.example.recipesroll.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import kmm.example.recipesroll.model.RecipeModel
 import kmm.example.recipesroll.remote.DummyRecipesApi
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -49,7 +50,40 @@ class RecipesViewModelUnitTest {
 
     @Test
     fun `test item selection`() {
-        assert(false)
+        val api = DummyRecipesApi
+        val vm = RecipesViewModel(api)
+        val modelAt: (Int) -> RecipeModel = { index ->
+            vm.getRecipes().value?.elementAt(index)
+                ?: throw IndexOutOfBoundsException()
+        }
+
+        api.recipesCount = 4
+        vm.updateRecipes()
+        val model = modelAt(1)
+        assertEquals(false, model.selected)
+
+        model.selected = true
+        assertEquals(true, modelAt(1).selected)
+
+        model.selected = false
+        assertEquals(false, modelAt(1).selected)
+
+        modelAt(2).selected = true
+        api.recipesCount = 8
+        vm.updateRecipes()
+        assertEquals(true, modelAt(2).selected)
+
+        modelAt(6).selected = true
+        api.recipesCount = 4
+        vm.updateRecipes()
+        var gotExpectedException = false
+        try {
+            assertEquals(false, modelAt(6).selected)
+        } catch (e: java.lang.IndexOutOfBoundsException) {
+            gotExpectedException = true
+        }
+        assert(gotExpectedException)
+        assertEquals(true, modelAt(2).selected)
     }
 
 }
