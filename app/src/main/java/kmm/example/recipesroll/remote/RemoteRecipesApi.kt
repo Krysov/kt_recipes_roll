@@ -28,4 +28,11 @@ object RemoteRecipesApi : RecipesApi {
             .subscribeOn(Schedulers.io())
             .subscribe(onResult, onError)
     }
+
+    fun fetchRecipes(): Collection<RecipeModel> {
+        return client
+            .observeAndTransform(RecipeModel::class.java)
+            .all()
+            .blockingFirst()
+    }
 }

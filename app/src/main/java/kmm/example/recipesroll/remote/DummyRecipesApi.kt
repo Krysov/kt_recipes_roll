@@ -9,7 +9,6 @@ import kmm.example.recipesroll.model.TagModel
 
 
 object DummyRecipesApi : RecipesApi {
-    private val gson = GsonBuilder().setPrettyPrinting().create()
 
     var recipesCount = 3
     var simulateConnectionError = false
@@ -22,9 +21,10 @@ object DummyRecipesApi : RecipesApi {
             if (simulateConnectionError) throw NetworkErrorException()
 
             onResult(IntRange(0, recipesCount - 1).map {
+                getPhotoData(it % 4)
                 getRecipeData(it % 4).copy(
                     id = "recipe_${it + 1}",
-                    photo = getPhotoData(it % 4)
+                    photoAsset = getPhotoData(it % 4),
                 )
             })
         } catch (e: Exception) {
@@ -67,7 +67,7 @@ object DummyRecipesApi : RecipesApi {
         }
     }
 
-    private fun getPhotoData(i: Int): CDAAsset {
+    fun getPhotoData(i: Int): CDAAsset {
         val photoData = when (i) {
             1 -> """
             {
@@ -339,4 +339,8 @@ object DummyRecipesApi : RecipesApi {
         }
         return gson.fromJson(photoData, CDAAsset::class.java)
     }
+
+    private val gson = GsonBuilder()
+        .setPrettyPrinting()
+        .create()
 }
