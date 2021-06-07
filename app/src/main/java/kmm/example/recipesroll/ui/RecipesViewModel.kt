@@ -9,15 +9,32 @@ import timber.log.Timber
 
 class RecipesViewModel(private val api: RecipesApi) : ViewModel() {
 
-    private val recipes: MutableLiveData<Collection<RecipeModel>> = MutableLiveData()
-
-    fun getRecipes() = recipes
+    val recipes: MutableLiveData<List<RecipeModel>> = MutableLiveData()
+    private var indexedRecipes = mutableMapOf<String, RecipeModel>()
 
     fun updateRecipes() {
         api.fetchRecipes(
-            { recipes.value = it },
-            { Timber.d(it) }
+            { syncRecipes(it) },
+            { Timber.d(it) },
         )
+    }
+
+    fun select(recipe: RecipeModel) = setSelection(recipe, true)
+    fun deselect(recipe: RecipeModel) = setSelection(recipe, false)
+    private fun setSelection(recipe: RecipeModel, selected: Boolean) {
+        indexedRecipes[recipe.id!!] = recipe.copy(selected = selected)
+        recipes.value = recipes.value?.map { indexedRecipes[it.id!!]!! }
+    }
+
+    private fun syncRecipes(recipes: Collection<RecipeModel>) {
+        val newRecipes: List<RecipeModel> = recipes.map {
+            when (val old = indexedRecipes[it.id]) {
+                null -> it
+                else -> it.copy(selected = old.selected)
+            }
+        }
+        indexedRecipes = newRecipes.associateBy { it.id!! }.toMutableMap()
+        this.recipes.value = newRecipes
     }
 
 }

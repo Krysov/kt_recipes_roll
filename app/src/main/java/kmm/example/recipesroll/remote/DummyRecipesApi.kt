@@ -3,7 +3,9 @@ package kmm.example.recipesroll.remote
 import android.accounts.NetworkErrorException
 import com.contentful.java.cda.CDAAsset
 import com.google.gson.GsonBuilder
+import kmm.example.recipesroll.model.ChefModel
 import kmm.example.recipesroll.model.RecipeModel
+import kmm.example.recipesroll.model.TagModel
 
 
 object DummyRecipesApi : RecipesApi {
@@ -20,7 +22,10 @@ object DummyRecipesApi : RecipesApi {
             if (simulateConnectionError) throw NetworkErrorException()
 
             onResult(IntRange(0, recipesCount - 1).map {
-                getRecipeData(it % 4).copy(photo = getPhotoData(it % 4))
+                getRecipeData(it % 4).copy(
+                    id = "recipe_${it + 1}",
+                    photo = getPhotoData(it % 4)
+                )
             })
         } catch (e: Exception) {
             onError(e)
@@ -28,62 +33,38 @@ object DummyRecipesApi : RecipesApi {
     }
 
     private fun getRecipeData(i: Int): RecipeModel {
-        val recipeData = when (i) {
-            1 -> """
-            {
-                "calories": 900.0,
-                "description": "Saag paneer is a popular Indian dish with iron-rich spinach and cubes of paneer, an Indian cheese that is firm enough to retain it\u0027s shape, but silky-soft on the inside. We have reimagined Saag Paneer and replaced the \"paneer\" with crispy cubes of firm tofu, making this already delicious and nutritious vegetarian dish burst with protein. Toasted pita bread is served alongside as an ode to naan. Cook, relax, and enjoy! [VIDEO](https://www.youtube.com/watch?v\u003dRMzWWwfWdVs)",
-                "title": "Tofu Saag Paneer with Buttery Toasted Pita"
-            }
-            """.trimIndent()
-
-            2 -> """
-            {
-                "calories": 345.0,
-                "chef": {
-                  "name": "Mark Zucchiniberg "
-                },
-                "description": "Warmer weather means the ushering in of grill season and this recipe completely celebrates the grill (or grill pan)! Squash and green beans are nicely charred then take a bath in a zesty cilantro-jalapeño dressing. After the steaks are perfectly seared, the same dressing does double duty as a tasty finishing sauce. A fresh radish salad tops it all off for crunch and a burst of color. Cook, relax, and enjoy!",
-                "title": "Grilled Steak \u0026 Vegetables with Cilantro-Jalapeño Dressing"
-            }
-            """.trimIndent()
-
-            3 -> """
-            {
-                "calories": 785.0,
-                "chef": {
-                  "name": "Jony Chives"
-                },
-                "description": "Crispy chicken skin, tender meat, and rich, tomatoey sauce form a winning trifecta of delicious in this one-pot braise. We spoon it over rice and peas to soak up every last drop of goodness, and serve a tangy arugula salad alongside for a vibrant boost of flavor and color. Dinner is served! Cook, relax, and enjoy!",
-                "tags": [
-                  {
-                    "name": "gluten free"
-                  },
-                  {
-                    "name": "healthy"
-                  }
-                ],
-                "title": "Crispy Chicken and Rice\twith Peas \u0026 Arugula Salad"
-            }
-            """.trimIndent()
-
-            else -> """
-            {
-                "calories": 788.0,
-                "description": "*Grilled Cheese 101*: Use delicious cheese and good quality bread; make crunchy on the outside and ooey gooey on the inside; add one or two ingredients for a flavor punch! In this case, cherry preserves serve as a sweet contrast to cheddar cheese, and basil adds a light, refreshing note. Use __mayonnaise__ on the outside of the bread to achieve the ultimate, crispy, golden-brown __grilled cheese__. Cook, relax, and enjoy!",
-                "tags": [
-                  {
-                    "name": "vegan"
-                  },
-                  {
-                    "name": "fake cheese"
-                  }
-                ],
-                "title": "White Cheddar Grilled Cheese with Cherry Preserves \u0026 Basil"
-            }
-            """.trimIndent()
+        return when (i) {
+            1 -> RecipeModel(
+                title = "Tofu Saag Paneer with Buttery Toasted Pita",
+                description = "Saag paneer is a popular Indian dish with iron-rich spinach and cubes of paneer, an Indian cheese that is firm enough to retain it\u0027s shape, but silky-soft on the inside. We have reimagined Saag Paneer and replaced the \"paneer\" with crispy cubes of firm tofu, making this already delicious and nutritious vegetarian dish burst with protein. Toasted pita bread is served alongside as an ode to naan. Cook, relax, and enjoy! [VIDEO](https://www.youtube.com/watch?v\u003dRMzWWwfWdVs)",
+                calories = 900.0,
+            )
+            2 -> RecipeModel(
+                title = "Grilled Steak \u0026 Vegetables with Cilantro-Jalapeño Dressing",
+                description = "Warmer weather means the ushering in of grill season and this recipe completely celebrates the grill (or grill pan)! Squash and green beans are nicely charred then take a bath in a zesty cilantro-jalapeño dressing. After the steaks are perfectly seared, the same dressing does double duty as a tasty finishing sauce. A fresh radish salad tops it all off for crunch and a burst of color. Cook, relax, and enjoy!",
+                calories = 345.0,
+                chef = ChefModel("Mark Zucchiniberg"),
+            )
+            3 -> RecipeModel(
+                title = "Crispy Chicken and Rice\twith Peas \u0026 Arugula Salad",
+                description = "Crispy chicken skin, tender meat, and rich, tomatoey sauce form a winning trifecta of delicious in this one-pot braise. We spoon it over rice and peas to soak up every last drop of goodness, and serve a tangy arugula salad alongside for a vibrant boost of flavor and color. Dinner is served! Cook, relax, and enjoy!",
+                calories = 785.0,
+                chef = ChefModel("Jony Chives"),
+                tags = listOf(
+                    TagModel("gluten free"),
+                    TagModel("healthy"),
+                ),
+            )
+            else -> RecipeModel(
+                title = "White Cheddar Grilled Cheese with Cherry Preserves \u0026 Basil",
+                description = "*Grilled Cheese 101*: Use delicious cheese and good quality bread; make crunchy on the outside and ooey gooey on the inside; add one or two ingredients for a flavor punch! In this case, cherry preserves serve as a sweet contrast to cheddar cheese, and basil adds a light, refreshing note. Use __mayonnaise__ on the outside of the bread to achieve the ultimate, crispy, golden-brown __grilled cheese__. Cook, relax, and enjoy!",
+                calories = 788.0,
+                tags = listOf(
+                    TagModel("vegan"),
+                    TagModel("fake cheese"),
+                ),
+            )
         }
-        return gson.fromJson(recipeData, RecipeModel::class.java)
     }
 
     private fun getPhotoData(i: Int): CDAAsset {

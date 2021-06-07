@@ -22,7 +22,7 @@ class RecipesViewModelUnitTest {
         var numReturnedItems = 0
         val api = DummyRecipesApi
         val vm = RecipesViewModel(api)
-        vm.getRecipes().observeForever {
+        vm.recipes.observeForever {
             numUpdateCalls++
             numReturnedItems = it.count()
         }
@@ -53,7 +53,7 @@ class RecipesViewModelUnitTest {
         val api = DummyRecipesApi
         val vm = RecipesViewModel(api)
         val modelAt: (Int) -> RecipeModel = { index ->
-            vm.getRecipes().value?.elementAt(index)
+            vm.recipes.value?.elementAt(index)
                 ?: throw IndexOutOfBoundsException()
         }
 
@@ -62,18 +62,18 @@ class RecipesViewModelUnitTest {
         val model = modelAt(1)
         assertEquals(false, model.selected)
 
-        model.selected = true
+        vm.select(model)
         assertEquals(true, modelAt(1).selected)
 
-        model.selected = false
+        vm.deselect(model)
         assertEquals(false, modelAt(1).selected)
 
-        modelAt(2).selected = true
+        vm.select(modelAt(2))
         api.recipesCount = 8
         vm.updateRecipes()
         assertEquals(true, modelAt(2).selected)
 
-        modelAt(6).selected = true
+        vm.select(modelAt(6))
         api.recipesCount = 4
         vm.updateRecipes()
         var gotExpectedException = false
