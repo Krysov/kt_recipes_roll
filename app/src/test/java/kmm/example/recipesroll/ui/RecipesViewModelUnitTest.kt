@@ -27,22 +27,22 @@ class RecipesViewModelUnitTest {
         }
 
         api.recipesCount = 4
-        vm.fetchRecipes()
+        vm.updateRecipes()
         assertEquals(1, numUpdateCalls)
         assertEquals(4, numReturnedItems)
 
         api.recipesCount = 8
-        vm.fetchRecipes()
+        vm.updateRecipes()
         assertEquals(2, numUpdateCalls)
         assertEquals(8, numReturnedItems)
 
         api.recipesCount = 0
-        vm.fetchRecipes()
+        vm.updateRecipes()
         assertEquals(3, numUpdateCalls)
         assertEquals(0, numReturnedItems)
 
         api.simulateConnectionError = true
-        vm.fetchRecipes()
+        vm.updateRecipes()
         assertEquals(3, numUpdateCalls)
         assertEquals(0, numReturnedItems)
     }

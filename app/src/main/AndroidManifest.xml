@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RecipesRoll">
         <activity
-            android:name=".ScrollingActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.RecipesRoll.NoActionBar">
             <intent-filter>

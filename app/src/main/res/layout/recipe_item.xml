@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="recipe"
+            type="kmm.example.recipesroll.model.RecipeModel" />
+    </data>
+
+    <TextView
+        android:layout_margin="8dp"
+        android:background="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:gravity="center"
+        android:hint="aaaaa"
+        android:text="@{recipe.title}"
+        android:textAlignment="center" />
+
+</layout>

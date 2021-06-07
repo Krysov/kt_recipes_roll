@@ -6,14 +6,18 @@ import kmm.example.recipesroll.model.RecipeModel
 import kmm.example.recipesroll.remote.RecipesApi
 import timber.log.Timber
 
+
 class RecipesViewModel(private val api: RecipesApi) : ViewModel() {
+
     private val recipes: MutableLiveData<Collection<RecipeModel>> = MutableLiveData()
+
     fun getRecipes() = recipes
 
-    fun fetchRecipes() {
+    fun updateRecipes() {
         api.fetchRecipes(
             { recipes.value = it },
             { Timber.d(it) }
         )
     }
+
 }
