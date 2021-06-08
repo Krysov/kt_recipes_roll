@@ -1,10 +1,8 @@
 package kmm.example.recipesroll.ui
 
 import android.content.Context
-import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,27 +17,21 @@ class RecipesListView @JvmOverloads constructor(
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
     fun applyViewModel(viewModel: RecipesViewModel, forOwner: LifecycleOwner) {
-        val adapter = RecipesListAdapter(viewModel)
+        val adapter = RecipesListAdapter(viewModel, context)
         this.adapter = adapter
         layoutManager = LinearLayoutManager(context, VERTICAL, false)
-
-        val itemSpacing = context.resources.getDimension(R.dimen.recipe_item_cell_margin).toInt()
-        addItemDecoration(VerticalSpaceItemDecoration(itemSpacing))
-
         viewModel.recipes.observe(forOwner, { adapter.setRecipes(it) })
         viewModel.updateRecipes()
     }
 
-    private class VerticalSpaceItemDecoration(private val verticalSpaceHeight: Int) :
-        ItemDecoration() {
-        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: State) {
-            outRect.top = verticalSpaceHeight / 2
-            outRect.bottom = verticalSpaceHeight / 2
-        }
-    }
+    private class RecipesListAdapter(
+        private val viewModel: RecipesViewModel,
+        context: Context,
+    ) : RecyclerView.Adapter<RecipesItemViewHolder>() {
 
-    private class RecipesListAdapter(private val viewModel: RecipesViewModel) :
-        RecyclerView.Adapter<RecipesItemViewHolder>() {
+        private val itemSpacing = context.resources
+            .getDimension(R.dimen.recipe_item_cell_margin).toInt()
+
         private var recipes: Collection<RecipeModel> = emptyList()
 
         fun setRecipes(recipes: Collection<RecipeModel>) {
@@ -54,6 +46,12 @@ class RecipesListView @JvmOverloads constructor(
         }
 
         override fun onBindViewHolder(holder: RecipesItemViewHolder, position: Int) {
+            val params = holder.itemView.layoutParams as MarginLayoutParams
+            if (position == 0) {
+                params.topMargin = itemSpacing
+            } else params.topMargin = 0
+            params.bottomMargin = itemSpacing
+            holder.itemView.layoutParams = params
             holder.init(recipes.elementAt(position))
         }
 

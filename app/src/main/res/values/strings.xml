@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">RecipesRoll</string>
-    <string name="placeholder_name">NAME</string>
 
-    <string name="recipe_list_item_chef_template">by NAME</string>
+    <string name="placeholder_name" translatable="false">$NAME</string>
+
+    <string name="appbar_greeting">Welcome!</string>
+    <string name="recipe_list_item_chef_template">by $NAME</string>
 </resources>
