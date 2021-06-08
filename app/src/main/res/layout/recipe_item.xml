@@ -15,7 +15,7 @@
     <kmm.example.recipesroll.ui.CardFrame
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="3dp">
+        android:elevation="1dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -68,7 +68,7 @@
                 android:id="@+id/chef_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="@dimen/recipe_item_cell_inner_margin"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
                 android:textAlignment="center"
@@ -79,20 +79,23 @@
                 android:id="@+id/recipe_description"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginHorizontal="@dimen/recipe_item_cell_inner_margin"
+                android:layout_marginBottom="@dimen/recipe_item_cell_inner_margin"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textAlignment="center"
                 android:textColor="@color/text_normal"
                 android:textSize="16sp" />
 
-            <GridLayout
+            <com.nex3z.flowlayout.FlowLayout
                 android:id="@+id/tag_container_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginHorizontal="@dimen/recipe_item_cell_inner_margin"
+                android:layout_marginBottom="@dimen/recipe_item_cell_inner_margin"
+                app:flChildSpacing="auto"
+                app:flChildSpacingForLastRow="8dp"
+                app:flRowSpacing="8dp" />
 
         </LinearLayout>
     </kmm.example.recipesroll.ui.CardFrame>

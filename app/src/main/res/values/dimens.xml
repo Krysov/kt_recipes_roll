@@ -2,6 +2,7 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="recipe_item_cell_height">72dp</dimen>
     <dimen name="recipe_item_cell_margin">16dp</dimen>
+    <dimen name="recipe_item_cell_inner_margin">12dp</dimen>
     <dimen name="recipe_item_cell_frame_corner_radius">12dp</dimen>
     <dimen name="recipe_item_cell_background_corner_radius">16dp</dimen>
     <dimen name="recipe_item_cell_items_corner_radius">6dp</dimen>

@@ -61,7 +61,13 @@ object DummyRecipesApi : RecipesApi {
                 calories = 788.0,
                 tags = listOf(
                     TagModel("vegan"),
-                    TagModel("cheese substitute"),
+                    TagModel("artificial lactose free no animal cheese substitute"),
+                    TagModel("bread"),
+                    TagModel("toast"),
+                    TagModel("wheat"),
+                    TagModel("carbon"),
+                    TagModel("saw dust"),
+                    TagModel("cherries"),
                 ),
             )
         }
