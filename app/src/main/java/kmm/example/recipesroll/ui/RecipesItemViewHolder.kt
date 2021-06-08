@@ -24,15 +24,18 @@ class RecipesItemViewHolder(
     fun init(recipe: RecipeModel) {
         binding.setVariable(BR.recipe, recipe)
         binding.executePendingBindings()
-        binding.root.setOnClickListener {
-            if (recipe.selected) viewModel.deselect(recipe)
-            else viewModel.select(recipe)
-        }
+        binding.root.setOnClickListener { onClick(recipe) }
+        binding.recipeDescription.setOnClickListener { onClick(recipe) }
         binding.tagContainerView.removeAllViews()
         when (recipe.selected) {
             true -> binding.setupDetail(recipe)
             false -> binding.setupPreview(recipe)
         }
+    }
+
+    private fun onClick(recipe: RecipeModel) {
+        if (recipe.selected) viewModel.deselect(recipe)
+        else viewModel.select(recipe)
     }
 
     private fun RecipeItemBinding.setupPreview(recipe: RecipeModel) {
