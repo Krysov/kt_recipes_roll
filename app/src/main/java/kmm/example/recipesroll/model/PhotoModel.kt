@@ -20,9 +20,12 @@ class PhotoModel(private val _photo: CDAAsset) {
     class ImageDetails(detailFields: Map<String, Any>) {
         val size: Double = detailFields["size"] as Double
         val dimen = ImageDimen(
-            width = (detailFields["image"] as Map<String, Double>)["width"]!!,
-            height = (detailFields["image"] as Map<String, Double>)["height"]!!,
+            width = getImageDimen(detailFields, "width"),
+            height = getImageDimen(detailFields, "height"),
         )
+
+        private fun getImageDimen(fields: Map<String, Any>, key: String) =
+            (fields["image"] as Map<*, *>)[key]!! as Double
     }
 
     class ImageDimen(

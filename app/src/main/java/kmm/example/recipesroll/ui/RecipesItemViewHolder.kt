@@ -40,12 +40,14 @@ class RecipesItemViewHolder(
         recipePhotoThumb.visibility = VISIBLE
         recipePhotoThumb.applyRecipePhoto(recipe, thumbnailDownsizeFactor)
 
+        tagContainerView.visibility = GONE
         recipeDescription.visibility = GONE
         chefName.visibility = GONE
     }
 
     private fun RecipeItemBinding.setupDetail(recipe: RecipeModel) {
         recipePhotoThumb.visibility = GONE
+        tagContainerView.visibility = VISIBLE
         recipePhotoHero.visibility = VISIBLE
         recipePhotoHero.applyRecipePhoto(recipe)
 
@@ -93,6 +95,7 @@ class RecipesItemViewHolder(
                         (photo.details.dimen.height * resolution).toInt(),
                     )
                 }
+                .priority(Picasso.Priority.HIGH)
                 .into(this)
         }
     }
