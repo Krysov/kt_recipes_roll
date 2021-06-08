@@ -6,6 +6,7 @@ import android.view.View.VISIBLE
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import io.noties.markwon.Markwon
 import kmm.example.recipesroll.BR
 import kmm.example.recipesroll.R
 import kmm.example.recipesroll.databinding.RecipeItemBinding
@@ -49,8 +50,9 @@ class RecipesItemViewHolder(
         recipePhotoHero.applyRecipePhoto(recipe)
 
         recipeDescription.visibility = VISIBLE
-        recipe.description?.let { description ->
-            recipeDescription.text = description
+        recipe.description?.let { text ->
+            Markwon.create(recipeDescription.context)
+                .setMarkdown(recipeDescription, text)
         }
 
         when (val name = recipe.chef?.name) {
