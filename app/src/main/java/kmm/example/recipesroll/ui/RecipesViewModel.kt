@@ -10,6 +10,7 @@ import timber.log.Timber
 class RecipesViewModel(private val api: RecipesApi) : ViewModel() {
 
     val recipes: MutableLiveData<List<RecipeModel>> = MutableLiveData()
+    val lastSelectedRecipe: MutableLiveData<RecipeModel> = MutableLiveData()
     private var indexedRecipes = mutableMapOf<String, RecipeModel>()
 
     fun updateRecipes() {
@@ -19,8 +20,13 @@ class RecipesViewModel(private val api: RecipesApi) : ViewModel() {
         )
     }
 
-    fun select(recipe: RecipeModel) = setSelection(recipe, true)
+    fun select(recipe: RecipeModel) {
+        setSelection(recipe, true)
+        lastSelectedRecipe.value = indexedRecipes[recipe.id]
+    }
+
     fun deselect(recipe: RecipeModel) = setSelection(recipe, false)
+
     private fun setSelection(recipe: RecipeModel, selected: Boolean) {
         indexedRecipes[recipe.id!!] = recipe.copy(selected = selected)
         recipes.value = recipes.value?.map { indexedRecipes[it.id!!]!! }

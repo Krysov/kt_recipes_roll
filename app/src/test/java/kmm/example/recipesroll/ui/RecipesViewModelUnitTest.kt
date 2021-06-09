@@ -61,17 +61,21 @@ class RecipesViewModelUnitTest {
         vm.updateRecipes()
         val model = modelAt(1)
         assertEquals(false, model.selected)
+        assertEquals(null, vm.lastSelectedRecipe.value?.id)
 
         vm.select(model)
         assertEquals(true, modelAt(1).selected)
+        assertEquals(model.id, vm.lastSelectedRecipe.value?.id)
 
         vm.deselect(model)
         assertEquals(false, modelAt(1).selected)
+        assertEquals(model.id, vm.lastSelectedRecipe.value?.id)
 
         vm.select(modelAt(2))
         api.recipesCount = 8
         vm.updateRecipes()
         assertEquals(true, modelAt(2).selected)
+        assertEquals(modelAt(2).id, vm.lastSelectedRecipe.value?.id)
 
         vm.select(modelAt(6))
         api.recipesCount = 4

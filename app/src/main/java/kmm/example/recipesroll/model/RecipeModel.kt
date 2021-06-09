@@ -18,7 +18,7 @@ data class RecipeModel(
     @ContentfulField val description: String? = null,
     @ContentfulField val chef: ChefModel? = null,
     @ContentfulField val tags: List<TagModel>? = null,
-    val selected: Boolean = false,
+    @Transient val selected: Boolean = false,
 ) {
 
     val photo: PhotoModel?
