@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.squareup.picasso.Picasso
 import kmm.example.recipesroll.databinding.MainActivityBinding
 import kmm.example.recipesroll.remote.RecipesApi
 import kmm.example.recipesroll.remote.RemoteRecipesApi
@@ -33,6 +34,10 @@ class MainActivity : AppCompatActivity() {
             .get(RecipesViewModel::class.java)
         lifecycleOwner = activity
         recipesListView.setupListView(viewModel!!, activity)
+        Picasso.get()
+            .load("https://i.imgur.com/GkRPkP0.jpg")
+            .priority(Picasso.Priority.LOW)
+            .into(backgroundImage)
     }
 
     @Suppress("UNCHECKED_CAST")

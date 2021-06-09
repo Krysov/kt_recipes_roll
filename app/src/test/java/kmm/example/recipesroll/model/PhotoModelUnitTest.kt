@@ -2,7 +2,6 @@ package kmm.example.recipesroll.model
 
 import kmm.example.recipesroll.remote.DummyRecipesApi
 import kmm.example.recipesroll.remote.RemoteRecipesApi
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -20,7 +19,6 @@ class PhotoModelUnitTest {
         }
     }
 
-    @Ignore
     @Test(timeout = 5000)
     fun `test wrapper getters validity with live data`() {
         RemoteRecipesApi.fetchRecipes().forEach { recipe ->
