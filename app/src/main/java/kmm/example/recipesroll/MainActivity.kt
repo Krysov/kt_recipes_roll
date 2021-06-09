@@ -6,15 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
 import kmm.example.recipesroll.databinding.MainActivityBinding
+import kmm.example.recipesroll.remote.RecipesApiFactory
 import kmm.example.recipesroll.remote.RecipesApi
-import kmm.example.recipesroll.remote.RemoteRecipesApi
 import kmm.example.recipesroll.ui.RecipesViewModel
 import timber.log.Timber
 
 
 class MainActivity : AppCompatActivity() {
 
-    val api: RecipesApi = RemoteRecipesApi
+    val api = RecipesApiFactory().create()
     val viewModelFactory = MainActivityViewModelFactory(api)
     private lateinit var binding: MainActivityBinding
 
@@ -49,4 +49,5 @@ class MainActivity : AppCompatActivity() {
             throw IllegalArgumentException("Unknown View Model Class")
         }
     }
+
 }
