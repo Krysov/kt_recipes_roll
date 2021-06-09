@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(activity, activity.viewModelFactory)
             .get(RecipesViewModel::class.java)
         lifecycleOwner = activity
-        recipesListView.applyViewModel(viewModel!!, activity)
+        recipesListView.setupListView(viewModel!!, activity)
     }
 
     @Suppress("UNCHECKED_CAST")
