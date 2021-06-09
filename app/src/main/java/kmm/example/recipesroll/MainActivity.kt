@@ -5,26 +5,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kmm.example.recipesroll.databinding.MainActivityBinding
-import kmm.example.recipesroll.remote.DummyRecipesApi
 import kmm.example.recipesroll.remote.RecipesApi
+import kmm.example.recipesroll.remote.RemoteRecipesApi
 import kmm.example.recipesroll.ui.RecipesViewModel
 import timber.log.Timber
 
 
 class MainActivity : AppCompatActivity() {
 
-    private val api: RecipesApi = DummyRecipesApi // TODO: REPLACE WITH LIVE API
-    private val viewModelFactory = MainActivityViewModelFactory(api)
+    val api: RecipesApi = RemoteRecipesApi
+    val viewModelFactory = MainActivityViewModelFactory(api)
     private lateinit var binding: MainActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.plant(Timber.DebugTree())
-
-
-        // TODO: REMOVE DEBUG IMPL
-        (api as DummyRecipesApi).recipesCount = 32
-
 
         setContentView(R.layout.main_activity)
         binding = MainActivityBinding
