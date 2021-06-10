@@ -21,7 +21,7 @@ class RecipesViewModel(
     val lastSelectedRecipe: MutableLiveData<RecipeModel> = MutableLiveData()
     private var indexedRecipes = mutableMapOf<String, RecipeModel>()
 
-    private val animationUpdateIntervalMillis: Long = 33 // 30 FPS
+    private val animationUpdateIntervalMillis: Long = 16 // ~60 FPS
     private var indexedAnimations = mutableMapOf<String, AnimationProgression<Float>>()
     private val animationUpdaters = mutableMapOf<String, Subject<AnimationProgression<Float>>>()
 

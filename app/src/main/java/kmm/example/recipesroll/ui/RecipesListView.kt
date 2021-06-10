@@ -2,6 +2,7 @@ package kmm.example.recipesroll.ui
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.DisplayMetrics
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +40,10 @@ class RecipesListView @JvmOverloads constructor(
         override fun calculateDyToMakeVisible(view: View?, snapPreference: Int): Int {
             return super.calculateDyToMakeVisible(view, snapPreference)
                 .plus(context.resources.getDimension(R.dimen.recipe_item_cell_margin).toInt())
+        }
+
+        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
+            return super.calculateSpeedPerPixel(displayMetrics) * 4.0f
         }
     }
 

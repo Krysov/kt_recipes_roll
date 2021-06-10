@@ -1,6 +1,5 @@
 package kmm.example.recipesroll.ui
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -33,19 +32,18 @@ class RecipesItemViewHolder(
         binding.root.setOnClickListener { onClick(recipe) }
         binding.recipeDescription.setOnClickListener { onClick(recipe) }
         binding.tagContainerView.removeAllViews()
+        binding.recipePhotoThumb.applyRecipePhoto(recipe, thumbnailDownsizeFactor)
         when (recipe.selected) {
             true -> binding.setupDetail(recipe)
-            false -> binding.setupPreview(recipe)
+            false -> binding.setupPreview()
         }
-
-        animateView(1.0f)
         animationUpdates?.dispose()
         animationUpdates = viewModel.getAnimationUpdates(recipe)
-            .subscribe({ animateView(it.progress) }, { Timber.e(it) })
+            .subscribe(this::applyAnimation) { Timber.e(it) }
     }
 
-    private fun animateView(progress: Float) {
-        binding.root.setBackgroundColor(Color.argb(1.0f, 1.0f, 1.0f, progress))
+    private fun applyAnimation(animation: AnimationProgression<Float>) {
+        binding.setFoldoutExtent(animation.interpolation)
     }
 
     fun release() {
@@ -53,36 +51,33 @@ class RecipesItemViewHolder(
     }
 
     private fun onClick(recipe: RecipeModel) {
-        if (recipe.selected) viewModel.deselect(recipe, createAnimation())
-        else viewModel.select(recipe, createAnimation())
+        when (recipe.selected) {
+            true -> viewModel.deselect(recipe,
+                AnimationProgression.createAnimation(animationDurationMillis) { progress -> 1 - progress })
+            false -> viewModel.select(recipe,
+                AnimationProgression.createAnimation(animationDurationMillis) { it })
+        }
     }
 
-    private fun createAnimation() = object : AnimationProgression<Float>(animationDurationMillis) {
-        override fun onComputeAnimatedValueInterpolation(progress: Float) = progress
-    }
-
-    private fun RecipeItemBinding.setupPreview(recipe: RecipeModel) {
-        recipePhotoHero.visibility = GONE
-        recipePhotoThumb.visibility = VISIBLE
-        recipePhotoThumb.applyRecipePhoto(recipe, thumbnailDownsizeFactor)
-
-        tagContainerView.visibility = GONE
-        recipeDescription.visibility = GONE
-        chefName.visibility = GONE
+    private fun RecipeItemBinding.setupPreview() {
+        setFoldoutExtent(0.0f)
+        recipePhotoHero.setImageDrawable(null)
     }
 
     private fun RecipeItemBinding.setupDetail(recipe: RecipeModel) {
-        recipePhotoThumb.visibility = GONE
-        tagContainerView.visibility = VISIBLE
-        recipePhotoHero.visibility = VISIBLE
+        setFoldoutExtent(1.0f)
         recipePhotoHero.applyRecipePhoto(recipe)
 
-        recipeDescription.visibility = VISIBLE
         recipe.description?.let { text ->
             Markwon.create(recipeDescription.context)
                 .setMarkdown(recipeDescription, text)
         }
 
+        setupChefName(recipe)
+        populateTagContainer(recipe)
+    }
+
+    private fun RecipeItemBinding.setupChefName(recipe: RecipeModel) {
         when (val name = recipe.chef?.name) {
             null -> chefName.visibility = GONE
             else -> {
@@ -92,8 +87,12 @@ class RecipesItemViewHolder(
                     .replace(root.context.getString(R.string.placeholder_name), name)
             }
         }
+    }
 
-        populateTagContainer(recipe)
+    private fun RecipeItemBinding.setFoldoutExtent(extent: Float) {
+        folderPhotoThumb.spread = 1 - extent
+        folderPhotoHero.spread = extent
+        folderDetails.spread = extent
     }
 
     private fun RecipeItemBinding.populateTagContainer(recipe: RecipeModel) {

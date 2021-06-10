@@ -9,26 +9,22 @@ import java.util.concurrent.TimeUnit
 
 
 open class AnimationPacer {
-    var disposable: Disposable? = null
-    var latestScheduleStartTime: Long? = null
+    private var disposable: Disposable? = null
 
     open fun scheduleUpdate(
         afterTimeDelayMillis: Long,
         callback: (passedTimeMillis: Long) -> Unit,
     ) {
-        disposable?.apply { dispose() }
+        disposable?.run { return } // no need to manage a second concurrent loop
+        // the callback of the first loop provides an opportunity to invoke another
 
-
-        val startTime = if (latestScheduleStartTime != null) latestScheduleStartTime!! else now()
-        latestScheduleStartTime = startTime
-
-
+        val startTime = now()
         disposable = Observable
             .timer(afterTimeDelayMillis, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                latestScheduleStartTime = null
+                disposable = null
                 callback(now() - startTime)
             }, { Timber.e(it) })
     }
@@ -54,4 +50,15 @@ abstract class AnimationProgression<InterpolatedValue>(private val animationDura
     private fun isCompleted(): Boolean = runtimeMillis >= animationDurationMillis
 
     abstract fun onComputeAnimatedValueInterpolation(progress: Float): InterpolatedValue
+
+    companion object {
+        fun <InterpolatedValue> createAnimation(
+            animationDurationMillis: Long,
+            interpolation: (progress: Float) -> InterpolatedValue,
+        ) = object : AnimationProgression<InterpolatedValue>(animationDurationMillis) {
+
+            override fun onComputeAnimatedValueInterpolation(progress: Float) =
+                interpolation(progress)
+        }
+    }
 }
