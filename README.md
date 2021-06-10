@@ -1,4 +1,4 @@
-![gif](https://j.gifs.com/lROk8J.gif)
+![gif](https://user-images.githubusercontent.com/12496282/121555948-b97b7f80-ca13-11eb-9685-b6cd0af54c44.gif)
 
 # about
 This displays a list of recipies which the user can browse and read in detail.
