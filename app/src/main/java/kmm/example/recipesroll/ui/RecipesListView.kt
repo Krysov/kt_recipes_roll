@@ -25,7 +25,7 @@ class RecipesListView @JvmOverloads constructor(
                 layoutManager!!.startSmoothScroll(Scroller(this.context, position))
             }
         })
-        viewModel.updateRecipes()
+        viewModel.fetchRecipes()
     }
 
 

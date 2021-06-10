@@ -1,5 +1,6 @@
 package kmm.example.recipesroll.ui
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -7,11 +8,14 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import io.noties.markwon.Markwon
+import io.reactivex.disposables.Disposable
 import kmm.example.recipesroll.BR
 import kmm.example.recipesroll.R
 import kmm.example.recipesroll.databinding.RecipeItemBinding
 import kmm.example.recipesroll.databinding.RecipeTagItemBinding
 import kmm.example.recipesroll.model.RecipeModel
+import kmm.example.recipesroll.utils.AnimationProgression
+import timber.log.Timber
 
 
 class RecipesItemViewHolder(
@@ -19,7 +23,9 @@ class RecipesItemViewHolder(
     private val viewModel: RecipesViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    private val animationDurationMillis = 250L
     private val thumbnailDownsizeFactor = 0.25
+    private var animationUpdates: Disposable? = null
 
     fun init(recipe: RecipeModel) {
         binding.setVariable(BR.recipe, recipe)
@@ -31,11 +37,28 @@ class RecipesItemViewHolder(
             true -> binding.setupDetail(recipe)
             false -> binding.setupPreview(recipe)
         }
+
+        animateView(1.0f)
+        animationUpdates?.dispose()
+        animationUpdates = viewModel.getAnimationUpdates(recipe)
+            .subscribe({ animateView(it.progress) }, { Timber.e(it) })
+    }
+
+    private fun animateView(progress: Float) {
+        binding.root.setBackgroundColor(Color.argb(1.0f, 1.0f, 1.0f, progress))
+    }
+
+    fun release() {
+        animationUpdates?.dispose()
     }
 
     private fun onClick(recipe: RecipeModel) {
-        if (recipe.selected) viewModel.deselect(recipe)
-        else viewModel.select(recipe)
+        if (recipe.selected) viewModel.deselect(recipe, createAnimation())
+        else viewModel.select(recipe, createAnimation())
+    }
+
+    private fun createAnimation() = object : AnimationProgression<Float>(animationDurationMillis) {
+        override fun onComputeAnimatedValueInterpolation(progress: Float) = progress
     }
 
     private fun RecipeItemBinding.setupPreview(recipe: RecipeModel) {

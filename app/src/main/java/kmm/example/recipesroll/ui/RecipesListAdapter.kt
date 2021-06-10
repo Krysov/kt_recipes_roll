@@ -45,5 +45,7 @@ class RecipesListAdapter(
         holder.init(recipes.elementAt(position))
     }
 
+    override fun onViewRecycled(holder: RecipesItemViewHolder) = holder.release()
+
     override fun getItemCount(): Int = recipes.size
 }
