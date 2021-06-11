@@ -23,7 +23,6 @@
             android:orientation="vertical">
 
             <kmm.example.recipesroll.ui.FoldingLayout
-                android:gravity="bottom"
                 android:id="@+id/folder_photo_hero"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,7 +52,6 @@
                 android:orientation="horizontal">
 
                 <kmm.example.recipesroll.ui.FoldingLayout
-                    android:gravity="right"
                     android:id="@+id/folder_photo_thumb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

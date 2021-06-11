@@ -22,22 +22,19 @@ class RecipesItemViewHolder(
     private val viewModel: RecipesListViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    private val animationDurationMillis = 250L
+    private val animationDurationMillis = 300L
     private val thumbnailDownsizeFactor = 0.25
     private var animationUpdates: Disposable? = null
 
     fun init(recipe: RecipeModel) {
         binding.setVariable(BR.recipe, recipe)
         binding.executePendingBindings()
-        binding.root.setOnClickListener { onClick(recipe) }
-        binding.recipeDescription.setOnClickListener { onClick(recipe) }
-        binding.tagContainerView.removeAllViews()
-        binding.recipePhotoThumb.applyRecipePhoto(recipe, thumbnailDownsizeFactor)
-        when (recipe.selected) {
-            true -> binding.setupDetail(recipe)
-            false -> binding.setupPreview()
+        binding.setupPreview(recipe)
+        if (recipe.selected) binding.setupDetail(recipe)
+
+        animationUpdates?.dispose() ?: run {
+            binding.setFoldoutExtent(0.0f)
         }
-        animationUpdates?.dispose()
         animationUpdates = viewModel.getAnimationUpdates(recipe)
             .subscribe(this::applyAnimation) { Timber.e(it) }
     }
@@ -59,13 +56,15 @@ class RecipesItemViewHolder(
         }
     }
 
-    private fun RecipeItemBinding.setupPreview() {
-        setFoldoutExtent(0.0f)
+    private fun RecipeItemBinding.setupPreview(recipe: RecipeModel) {
+        root.setOnClickListener { onClick(recipe) }
+        recipeDescription.setOnClickListener { onClick(recipe) }
+        tagContainerView.removeAllViews()
+        recipePhotoThumb.applyRecipePhoto(recipe, thumbnailDownsizeFactor)
         recipePhotoHero.setImageDrawable(null)
     }
 
     private fun RecipeItemBinding.setupDetail(recipe: RecipeModel) {
-        setFoldoutExtent(1.0f)
         recipePhotoHero.applyRecipePhoto(recipe)
 
         recipe.description?.let { text ->

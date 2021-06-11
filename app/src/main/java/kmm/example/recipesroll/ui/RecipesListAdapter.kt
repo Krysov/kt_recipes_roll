@@ -1,6 +1,7 @@
 package kmm.example.recipesroll.ui
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -22,9 +23,9 @@ class RecipesListAdapter(
         notifyDataSetChanged()
     }
 
-    fun getPositionForRecipe(recipe: RecipeModel): Int? {
-        recipes.forEachIndexed { i, r ->
-            if (recipe.id.equals(r.id)) return i
+    fun getPositionForRecipe(forRecipe: RecipeModel): Int? {
+        recipes.forEachIndexed { i, recipe ->
+            if (forRecipe.id.equals(recipe.id)) return i
         }
         return null
     }
