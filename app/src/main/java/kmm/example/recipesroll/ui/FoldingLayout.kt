@@ -4,15 +4,18 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View.MeasureSpec.*
 import android.widget.LinearLayout
+import kotlin.math.abs
 
 
 class FoldingLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
+    private val visibilityThresholdPx = 1
+
     var spread: Float = 1.0f
         set(value) {
-            field = value
+            field = value.coerceAtLeast(0.0f)
             requestLayout()
         }
 
@@ -28,16 +31,22 @@ class FoldingLayout @JvmOverloads constructor(
             HORIZONTAL -> {
                 adjustedWidth = (measuredWidth.toFloat() * spread).toInt()
                 adjustedHeight = measuredHeight
+                updateVisibility(adjustedWidth)
             }
             else -> { // default VERTICAL
                 adjustedWidth = measuredWidth
                 adjustedHeight = (measuredHeight.toFloat() * spread).toInt()
+                updateVisibility(adjustedHeight)
             }
         }
         super.onMeasure(
             makeMeasureSpec(adjustedWidth, EXACTLY),
             makeMeasureSpec(adjustedHeight, EXACTLY),
         )
+    }
+
+    private fun updateVisibility(basedOnSize: Int) {
+        visibility = if (abs(basedOnSize) >= visibilityThresholdPx) VISIBLE else INVISIBLE
     }
 
 }

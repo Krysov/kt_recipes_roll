@@ -2,7 +2,9 @@ package kmm.example.recipesroll.ui
 
 import android.content.Context
 import android.view.View
+import android.view.View.INVISIBLE
 import android.view.View.MeasureSpec.*
+import android.view.View.VISIBLE
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import androidx.test.core.app.ApplicationProvider
@@ -10,8 +12,10 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
 
+@Config(manifest = Config.NONE)
 @RunWith(RobolectricTestRunner::class)
 class FoldingLayoutUnitTest {
 
@@ -25,14 +29,17 @@ class FoldingLayoutUnitTest {
         layout.spread = 0.0f
         updateDimen(layout)
         assertEqualsDimen(300, 0, layout)
+        Assert.assertEquals(INVISIBLE, layout.visibility)
 
         layout.spread = 0.5f
         updateDimen(layout)
         assertEqualsDimen(300, 100, layout)
+        Assert.assertEquals(VISIBLE, layout.visibility)
 
         layout.spread = 1.0f
         updateDimen(layout)
         assertEqualsDimen(300, 200, layout)
+        Assert.assertEquals(VISIBLE, layout.visibility)
     }
 
     @Test
@@ -42,14 +49,17 @@ class FoldingLayoutUnitTest {
         layout.spread = 0.0f
         updateDimen(layout)
         assertEqualsDimen(0, 200, layout)
+        Assert.assertEquals(INVISIBLE, layout.visibility)
 
         layout.spread = 0.5f
         updateDimen(layout)
         assertEqualsDimen(150, 200, layout)
+        Assert.assertEquals(VISIBLE, layout.visibility)
 
         layout.spread = 1.0f
         updateDimen(layout)
         assertEqualsDimen(300, 200, layout)
+        Assert.assertEquals(VISIBLE, layout.visibility)
     }
 
     @Test
@@ -58,11 +68,13 @@ class FoldingLayoutUnitTest {
 
         layout.spread = -0.1f
         updateDimen(layout)
-        assertEqualsDimen(300, -20, layout)
+        assertEqualsDimen(300, 0, layout)
+        Assert.assertEquals(INVISIBLE, layout.visibility)
 
         layout.spread = 1.1f
         updateDimen(layout)
         assertEqualsDimen(300, 220, layout)
+        Assert.assertEquals(VISIBLE, layout.visibility)
     }
 
     private fun updateDimen(layout: FoldingLayout) {
