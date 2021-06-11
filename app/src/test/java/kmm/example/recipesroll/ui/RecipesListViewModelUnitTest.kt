@@ -3,6 +3,7 @@ package kmm.example.recipesroll.ui
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import io.reactivex.Observable
 import io.reactivex.Scheduler
+import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.internal.schedulers.ExecutorScheduler.ExecutorWorker
 import io.reactivex.plugins.RxJavaPlugins
 import kmm.example.recipesroll.remote.DummyRecipesApi
@@ -112,7 +113,7 @@ class RecipesListViewModelUnitTest {
 
             override fun scheduleUpdate(
                 afterTimeDelayMillis: Long,
-                callback: (passedTimeMillis: Long) -> Unit
+                callback: (passedTimeMillis: Long) -> Unit,
             ) = run { this.callback = callback }
         }
         val vm = RecipesListViewModel(DummyRecipesApi, timer).apply { fetchRecipes() }
@@ -189,6 +190,7 @@ class RecipesListViewModelUnitTest {
         }
         RxJavaPlugins.setInitIoSchedulerHandler { immediate }
         RxJavaPlugins.setInitComputationSchedulerHandler { immediate }
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { immediate }
     }
 
 }
