@@ -6,10 +6,6 @@
     <data>
 
         <import type="android.view.View" />
-
-        <variable
-            name="viewModel"
-            type="kmm.example.recipesroll.ui.RecipesListViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

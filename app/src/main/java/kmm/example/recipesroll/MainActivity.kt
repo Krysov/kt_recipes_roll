@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
 import kmm.example.recipesroll.databinding.MainActivityBinding
-import kmm.example.recipesroll.remote.RecipesApiFactory
 import kmm.example.recipesroll.remote.RecipesApi
+import kmm.example.recipesroll.remote.RecipesApiFactory
 import kmm.example.recipesroll.ui.RecipesListViewModel
 import timber.log.Timber
 
@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     val api = RecipesApiFactory().create()
     val viewModelFactory = MainActivityViewModelFactory(api)
     private lateinit var binding: MainActivityBinding
+    private val backgroundImageUrl = "https://i.imgur.com/GkRPkP0.jpg"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,14 +31,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun onBindView(): MainActivityBinding.() -> Unit = {
         val activity = this@MainActivity
-        viewModel = ViewModelProvider(activity, activity.viewModelFactory)
+        val viewModel = ViewModelProvider(activity, activity.viewModelFactory)
             .get(RecipesListViewModel::class.java)
         lifecycleOwner = activity
-        recipesListView.setupListView(viewModel!!, activity)
+        recipesListView.setupListView(viewModel, activity)
         Picasso.get()
-            .load("https://i.imgur.com/GkRPkP0.jpg")
+            .load(backgroundImageUrl)
             .priority(Picasso.Priority.LOW)
             .into(backgroundImage)
+
+        viewModel.lastSelectedRecipe.observe(activity) {
+            appBar.setExpanded(false, true)
+        }
     }
 
     @Suppress("UNCHECKED_CAST")

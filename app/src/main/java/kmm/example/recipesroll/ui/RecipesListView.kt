@@ -1,5 +1,6 @@
 package kmm.example.recipesroll.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.util.DisplayMetrics
@@ -8,7 +9,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Observable
 import kmm.example.recipesroll.R
+import java.util.concurrent.TimeUnit
 
 
 class RecipesListView @JvmOverloads constructor(
@@ -23,12 +26,21 @@ class RecipesListView @JvmOverloads constructor(
         viewModel.recipes.observe(forOwner, { adapter.setRecipes(it) })
         viewModel.lastSelectedRecipe.observe(forOwner, {
             adapter.getPositionForRecipe(it)?.let { position ->
-                layoutManager!!.startSmoothScroll(Scroller(this.context, position))
+                smoothScrollToItem(position)
             }
         })
         viewModel.fetchRecipes()
     }
 
+    @SuppressLint("CheckResult")
+    private fun smoothScrollToItem(position: Int) {
+        Observable
+            // use a delay to interfere less with any foldout animations
+            .timer(100, TimeUnit.MILLISECONDS)
+            .subscribe {
+                layoutManager!!.startSmoothScroll(Scroller(this.context, position))
+            }
+    }
 
     private class Scroller(val context: Context, toPosition: Int) : LinearSmoothScroller(context) {
         init {
