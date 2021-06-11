@@ -17,6 +17,7 @@
     <style name="Theme.RecipesRoll.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 
     <style name="Theme.RecipesRoll.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
