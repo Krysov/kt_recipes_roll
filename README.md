@@ -7,6 +7,7 @@ to a separate view to display the recipe details and allow for further browsing.
 
 # installation
 - have Android Studio set up for kotlin projects
+- set the values contentful.space and contentful.token in the local.properties
 - for the instrument test disable animations on your test device
 
 # known issues
