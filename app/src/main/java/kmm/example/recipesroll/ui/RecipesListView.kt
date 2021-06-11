@@ -18,28 +18,36 @@ class RecipesListView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
+    private val itemFoldoutAnimationDurationMillis = context.resources
+        .getInteger(R.integer.recipe_list_foldout_animation_duration_ms).toLong()
+
     fun setupListView(viewModel: RecipesListViewModel, forOwner: LifecycleOwner) {
         val adapter = RecipesListAdapter(viewModel, context)
         this.adapter = adapter
         layoutManager = LinearLayoutManager(context, VERTICAL, false)
+        viewModel.onApplyViewModel(forOwner, adapter)
+    }
 
-        viewModel.recipes.observe(forOwner, { adapter.setRecipes(it) })
-        viewModel.lastSelectedRecipe.observe(forOwner, {
+    private fun RecipesListViewModel.onApplyViewModel(
+        forOwner: LifecycleOwner,
+        adapter: RecipesListAdapter
+    ) {
+        recipes.observe(forOwner, { adapter.setRecipes(it) })
+        lastSelectedRecipe.observe(forOwner, {
             adapter.getPositionForRecipe(it)?.let { position ->
-                smoothScrollToItem(position)
+                Observable
+                    .fromCallable { smoothScrollToItem(layoutManager, position) }
+                    // invoke a second scroll to adjust for the changed item view height
+                    .delay(itemFoldoutAnimationDurationMillis, TimeUnit.MILLISECONDS)
+                    .subscribe { smoothScrollToItem(layoutManager, position) }
             }
         })
-        viewModel.fetchRecipes()
+        fetchRecipes()
     }
 
     @SuppressLint("CheckResult")
-    private fun smoothScrollToItem(position: Int) {
-        Observable
-            // use a delay to interfere less with any foldout animations
-            .timer(100, TimeUnit.MILLISECONDS)
-            .subscribe {
-                layoutManager!!.startSmoothScroll(Scroller(this.context, position))
-            }
+    private fun smoothScrollToItem(layoutManager: LayoutManager?, position: Int) {
+        layoutManager!!.startSmoothScroll(Scroller(this.context, position))
     }
 
     private class Scroller(val context: Context, toPosition: Int) : LinearSmoothScroller(context) {

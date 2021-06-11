@@ -22,8 +22,9 @@ class RecipesItemViewHolder(
     private val viewModel: RecipesListViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    private val animationDurationMillis = 250L
     private val thumbnailDownsizeFactor = 0.25
+    private val animationDurationMillis = binding.root.context.resources
+        .getInteger(R.integer.recipe_list_foldout_animation_duration_ms).toLong()
     private var animationUpdates: Disposable? = null
 
     fun init(recipe: RecipeModel) {
