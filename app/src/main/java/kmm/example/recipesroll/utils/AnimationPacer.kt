@@ -15,7 +15,7 @@ open class AnimationPacer {
         afterTimeDelayMillis: Long,
         callback: (passedTimeMillis: Long) -> Unit,
     ) {
-        disposable?.run { return } // no need to manage a second concurrent loop
+        if (disposable != null) return // no need to manage a second concurrent loop
         // the callback of the first loop provides an opportunity to invoke another
 
         val startTime = now()

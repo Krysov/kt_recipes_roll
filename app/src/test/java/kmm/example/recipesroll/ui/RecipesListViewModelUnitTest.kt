@@ -20,7 +20,7 @@ import kotlin.math.roundToInt
 
 
 @RunWith(JUnit4::class)
-class RecipesViewModelUnitTest {
+class RecipesListViewModelUnitTest {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -30,7 +30,7 @@ class RecipesViewModelUnitTest {
         var numUpdateCalls = 0
         var numReturnedItems = 0
         val api = DummyRecipesApi
-        val vm = RecipesViewModel(api)
+        val vm = RecipesListViewModel(api)
         vm.recipes.observeForever {
             numUpdateCalls++
             numReturnedItems = it.count()
@@ -61,7 +61,7 @@ class RecipesViewModelUnitTest {
     fun `test item selection`() {
         var numRecipesUpdate = 0
         val api = DummyRecipesApi
-        val vm = RecipesViewModel(api)
+        val vm = RecipesListViewModel(api)
             .apply { recipes.observeForever { numRecipesUpdate++ } }
         assertEquals(0, numRecipesUpdate)
 
@@ -115,7 +115,7 @@ class RecipesViewModelUnitTest {
                 callback: (passedTimeMillis: Long) -> Unit
             ) = run { this.callback = callback }
         }
-        val vm = RecipesViewModel(DummyRecipesApi, timer).apply { fetchRecipes() }
+        val vm = RecipesListViewModel(DummyRecipesApi, timer).apply { fetchRecipes() }
         val ap = object : AnimationProgression<Float>(300) {
             override fun onComputeAnimatedValueInterpolation(progress: Float) = 20 * (1 - progress)
         }
@@ -163,10 +163,10 @@ class RecipesViewModelUnitTest {
         assert(nestedError == null) { nestedError!! }
     }
 
-    private fun RecipesViewModel.animationAt(index: Int) =
+    private fun RecipesListViewModel.animationAt(index: Int) =
         getAnimationUpdates(modelAt(index))
 
-    private fun RecipesViewModel.modelAt(index: Int) =
+    private fun RecipesListViewModel.modelAt(index: Int) =
         recipes.value?.elementAt(index)
             ?: throw IndexOutOfBoundsException()
 

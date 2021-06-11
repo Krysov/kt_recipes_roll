@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="kmm.example.recipesroll.ui.RecipesViewModel" />
+            type="kmm.example.recipesroll.ui.RecipesListViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

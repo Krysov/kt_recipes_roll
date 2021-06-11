@@ -11,7 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kmm.example.recipesroll.ui.RecipesViewModel
+import kmm.example.recipesroll.ui.RecipesListViewModel
 import org.hamcrest.Matcher
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -29,7 +29,7 @@ class MainIntegrationTest {
     @Test
     fun testRecipeListItemLoading() {
         var activity: MainActivity
-        var viewModel: RecipesViewModel
+        var viewModel: RecipesListViewModel
         var numSelectionCalls = 0
         var listItemHeight = -10
         Espresso
@@ -40,7 +40,7 @@ class MainIntegrationTest {
                 // setup env vars
                 activity = listView.context as MainActivity
                 viewModel = ViewModelProvider(activity, activity.viewModelFactory)
-                    .get(RecipesViewModel::class.java)
+                    .get(RecipesListViewModel::class.java)
                 viewModel.lastSelectedRecipe.observeForever {
                     numSelectionCalls++
                 }

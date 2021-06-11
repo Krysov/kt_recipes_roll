@@ -15,7 +15,7 @@ class RecipesListView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
-    fun setupListView(viewModel: RecipesViewModel, forOwner: LifecycleOwner) {
+    fun setupListView(viewModel: RecipesListViewModel, forOwner: LifecycleOwner) {
         val adapter = RecipesListAdapter(viewModel, context)
         this.adapter = adapter
         layoutManager = LinearLayoutManager(context, VERTICAL, false)

@@ -12,7 +12,7 @@ import kmm.example.recipesroll.utils.AnimationProgression
 import timber.log.Timber
 
 
-class RecipesViewModel(
+class RecipesListViewModel(
     private val api: RecipesApi,
     private val animationPacer: AnimationPacer = AnimationPacer(),
 ) : ViewModel() {
@@ -50,7 +50,6 @@ class RecipesViewModel(
     }
 
     private fun updateRecipesList(newRecipes: List<RecipeModel>) {
-//        animationUpdaters.clear()
         recipes.value = newRecipes
     }
 
@@ -64,7 +63,6 @@ class RecipesViewModel(
 
     private fun enqueueAnimation(animation: AnimationProgression<Float>, withKey: String) {
         indexedAnimations[withKey] = animation
-//        scheduleNextAnimationUpdate()
         updateAnimationQueue(0)
     }
 
@@ -72,11 +70,12 @@ class RecipesViewModel(
         val expiredAnimationKeys = mutableListOf<String>()
         indexedAnimations.forEach { (key, value) ->
             if (value.applyAndCheckCompletion(withTimeDeltaMillis)) expiredAnimationKeys.add(key)
-            indexedRecipes[key]?.let { (getAnimationUpdates(it) as Subject).onNext(value) } ?: let {
+            indexedRecipes[key]?.let {
+                (getAnimationUpdates(it) as Subject).onNext(value)
+            } ?: let { // removing animation data for missing recipes
                 expiredAnimationKeys.add(key)
                 animationUpdaters.remove(key)
-            } // removing animation data for missing recipes
-//            animationUpdaters[key]?.apply { onNext(value) }
+            }
         }
         expiredAnimationKeys.forEach { key -> indexedAnimations.remove(key) }
         scheduleNextAnimationUpdate()

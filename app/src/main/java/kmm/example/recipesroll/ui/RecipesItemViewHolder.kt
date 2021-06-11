@@ -19,7 +19,7 @@ import timber.log.Timber
 
 class RecipesItemViewHolder(
     private val binding: RecipeItemBinding,
-    private val viewModel: RecipesViewModel,
+    private val viewModel: RecipesListViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val animationDurationMillis = 250L
@@ -42,12 +42,12 @@ class RecipesItemViewHolder(
             .subscribe(this::applyAnimation) { Timber.e(it) }
     }
 
-    private fun applyAnimation(animation: AnimationProgression<Float>) {
-        binding.setFoldoutExtent(animation.interpolation)
-    }
-
     fun release() {
         animationUpdates?.dispose()
+    }
+
+    private fun applyAnimation(animation: AnimationProgression<Float>) {
+        binding.setFoldoutExtent(animation.interpolation)
     }
 
     private fun onClick(recipe: RecipeModel) {
@@ -77,6 +77,12 @@ class RecipesItemViewHolder(
         populateTagContainer(recipe)
     }
 
+    private fun RecipeItemBinding.setFoldoutExtent(extent: Float) {
+        folderPhotoThumb.spread = 1 - extent
+        folderPhotoHero.spread = extent
+        folderDetails.spread = extent
+    }
+
     private fun RecipeItemBinding.setupChefName(recipe: RecipeModel) {
         when (val name = recipe.chef?.name) {
             null -> chefName.visibility = GONE
@@ -87,12 +93,6 @@ class RecipesItemViewHolder(
                     .replace(root.context.getString(R.string.placeholder_name), name)
             }
         }
-    }
-
-    private fun RecipeItemBinding.setFoldoutExtent(extent: Float) {
-        folderPhotoThumb.spread = 1 - extent
-        folderPhotoHero.spread = extent
-        folderDetails.spread = extent
     }
 
     private fun RecipeItemBinding.populateTagContainer(recipe: RecipeModel) {
@@ -106,10 +106,7 @@ class RecipesItemViewHolder(
         }
     }
 
-    private fun ImageView.applyRecipePhoto(
-        recipe: RecipeModel,
-        resizeResolution: Double = 1.0,
-    ) {
+    private fun ImageView.applyRecipePhoto(recipe: RecipeModel, resizeResolution: Double = 1.0) {
         val resolution = resizeResolution.coerceAtMost(1.0)
         recipe.photo?.let { photo ->
             Picasso.get()

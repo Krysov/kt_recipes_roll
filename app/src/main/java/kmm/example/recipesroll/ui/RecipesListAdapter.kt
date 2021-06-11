@@ -9,7 +9,7 @@ import kmm.example.recipesroll.databinding.RecipeItemBinding
 import kmm.example.recipesroll.model.RecipeModel
 
 class RecipesListAdapter(
-    private val viewModel: RecipesViewModel,
+    private val viewModel: RecipesListViewModel,
     context: Context,
 ) : RecyclerView.Adapter<RecipesItemViewHolder>() {
 

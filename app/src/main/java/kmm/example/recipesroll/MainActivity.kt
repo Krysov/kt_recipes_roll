@@ -8,7 +8,7 @@ import com.squareup.picasso.Picasso
 import kmm.example.recipesroll.databinding.MainActivityBinding
 import kmm.example.recipesroll.remote.RecipesApiFactory
 import kmm.example.recipesroll.remote.RecipesApi
-import kmm.example.recipesroll.ui.RecipesViewModel
+import kmm.example.recipesroll.ui.RecipesListViewModel
 import timber.log.Timber
 
 
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     private fun onBindView(): MainActivityBinding.() -> Unit = {
         val activity = this@MainActivity
         viewModel = ViewModelProvider(activity, activity.viewModelFactory)
-            .get(RecipesViewModel::class.java)
+            .get(RecipesListViewModel::class.java)
         lifecycleOwner = activity
         recipesListView.setupListView(viewModel!!, activity)
         Picasso.get()
@@ -43,8 +43,8 @@ class MainActivity : AppCompatActivity() {
     @Suppress("UNCHECKED_CAST")
     class MainActivityViewModelFactory(private val api: RecipesApi) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(RecipesViewModel::class.java)) {
-                return RecipesViewModel(api) as T
+            if (modelClass.isAssignableFrom(RecipesListViewModel::class.java)) {
+                return RecipesListViewModel(api) as T
             }
             throw IllegalArgumentException("Unknown View Model Class")
         }
