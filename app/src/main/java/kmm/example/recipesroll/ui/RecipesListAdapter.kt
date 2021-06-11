@@ -1,13 +1,13 @@
 package kmm.example.recipesroll.ui
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kmm.example.recipesroll.R
 import kmm.example.recipesroll.databinding.RecipeItemBinding
 import kmm.example.recipesroll.model.RecipeModel
+
 
 class RecipesListAdapter(
     private val viewModel: RecipesListViewModel,

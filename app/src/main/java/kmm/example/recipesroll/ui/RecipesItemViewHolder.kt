@@ -22,7 +22,7 @@ class RecipesItemViewHolder(
     private val viewModel: RecipesListViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    private val animationDurationMillis = 300L
+    private val animationDurationMillis = 250L
     private val thumbnailDownsizeFactor = 0.25
     private var animationUpdates: Disposable? = null
 
@@ -41,6 +41,8 @@ class RecipesItemViewHolder(
 
     fun release() {
         animationUpdates?.dispose()
+        binding.recipePhotoHero.setImageDrawable(null)
+        binding.recipePhotoThumb.setImageDrawable(null)
     }
 
     private fun applyAnimation(animation: AnimationProgression<Float>) {
@@ -61,7 +63,6 @@ class RecipesItemViewHolder(
         recipeDescription.setOnClickListener { onClick(recipe) }
         tagContainerView.removeAllViews()
         recipePhotoThumb.applyRecipePhoto(recipe, thumbnailDownsizeFactor)
-        recipePhotoHero.setImageDrawable(null)
     }
 
     private fun RecipeItemBinding.setupDetail(recipe: RecipeModel) {

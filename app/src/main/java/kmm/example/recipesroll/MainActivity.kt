@@ -14,8 +14,8 @@ import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    val api = RecipesApiFactory().create()
-    val viewModelFactory = MainActivityViewModelFactory(api)
+    private val api = RecipesApiFactory().create()
+    private val viewModelFactory = MainActivityViewModelFactory(api)
     private lateinit var binding: MainActivityBinding
     private val backgroundImageUrl = "https://i.imgur.com/GkRPkP0.jpg"
 

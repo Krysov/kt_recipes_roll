@@ -11,6 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kmm.example.recipesroll.remote.RecipesApiFactory
 import kmm.example.recipesroll.ui.RecipesListViewModel
 import org.hamcrest.Matcher
 import org.junit.Assert.assertEquals
@@ -39,7 +40,9 @@ class MainIntegrationTest {
 
                 // setup env vars
                 activity = listView.context as MainActivity
-                viewModel = ViewModelProvider(activity, activity.viewModelFactory)
+                val api = RecipesApiFactory().create()
+                val vmf = MainActivity.MainActivityViewModelFactory(api)
+                viewModel = ViewModelProvider(activity, vmf)
                     .get(RecipesListViewModel::class.java)
                 viewModel.lastSelectedRecipe.observeForever {
                     numSelectionCalls++
