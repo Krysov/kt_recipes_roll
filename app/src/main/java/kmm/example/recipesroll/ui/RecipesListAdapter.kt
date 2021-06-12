@@ -12,7 +12,7 @@ import kmm.example.recipesroll.model.RecipeModel
 class RecipesListAdapter(
     private val viewModel: RecipesListViewModel,
     context: Context,
-) : RecyclerView.Adapter<RecipesItemViewHolder>() {
+) : RecyclerView.Adapter<RecipesListItemViewHolder>() {
 
     private val itemSpacing = context.resources
         .getDimension(R.dimen.recipe_item_cell_margin).toInt()
@@ -30,13 +30,13 @@ class RecipesListAdapter(
         return null
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipesItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipesListItemViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = RecipeItemBinding.inflate(inflater, parent, false)
-        return RecipesItemViewHolder(binding, viewModel)
+        return RecipesListItemViewHolder(binding, viewModel)
     }
 
-    override fun onBindViewHolder(holder: RecipesItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecipesListItemViewHolder, position: Int) {
         val params = holder.itemView.layoutParams as ViewGroup.MarginLayoutParams
         if (position == 0) {
             params.topMargin = itemSpacing
@@ -46,7 +46,7 @@ class RecipesListAdapter(
         holder.init(recipes.elementAt(position))
     }
 
-    override fun onViewRecycled(holder: RecipesItemViewHolder) = holder.release()
+    override fun onViewRecycled(holder: RecipesListItemViewHolder) = holder.release()
 
     override fun getItemCount(): Int = recipes.size
 }

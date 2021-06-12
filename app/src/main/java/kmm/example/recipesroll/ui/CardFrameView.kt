@@ -10,7 +10,7 @@ import kmm.example.recipesroll.R.drawable.recipe_item_view_background
 import kmm.example.recipesroll.R.drawable.recipe_item_view_frame
 
 
-class CardFrame @JvmOverloads constructor(
+class CardFrameView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 

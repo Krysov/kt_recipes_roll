@@ -17,7 +17,7 @@ import kmm.example.recipesroll.utils.AnimationProgression
 import timber.log.Timber
 
 
-class RecipesItemViewHolder(
+class RecipesListItemViewHolder(
     private val binding: RecipeItemBinding,
     private val viewModel: RecipesListViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {

@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
     private val api = RecipesApiFactory().create()
     private val viewModelFactory = MainActivityViewModelFactory(api)
     private lateinit var binding: MainActivityBinding
-    private val backgroundImageUrl = "https://i.imgur.com/GkRPkP0.jpg"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleOwner = activity
         recipesListView.setupListView(viewModel, activity)
         Picasso.get()
-            .load(backgroundImageUrl)
+            .load(resources.getString(R.string.main_background_image_url))
             .priority(Picasso.Priority.LOW)
             .into(backgroundImage)
 

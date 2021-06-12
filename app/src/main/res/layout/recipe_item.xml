@@ -12,7 +12,7 @@
             type="kmm.example.recipesroll.model.RecipeModel" />
     </data>
 
-    <kmm.example.recipesroll.ui.CardFrame
+    <kmm.example.recipesroll.ui.CardFrameView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/recipe_item_view_background">
@@ -120,5 +120,5 @@
             </kmm.example.recipesroll.ui.FoldingLayout>
 
         </LinearLayout>
-    </kmm.example.recipesroll.ui.CardFrame>
+    </kmm.example.recipesroll.ui.CardFrameView>
 </layout>
